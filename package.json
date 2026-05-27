@@ -1,0 +1,22 @@
+{
+  "name": "saucedemo-manual-testing-portfolio",
+  "version": "1.0.0",
+  "description": "This repository contains my manual testing artifacts, exploratory notes, and bug reports for the SauceDemo web application as part of my QA engineering skill rebuilding program",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epando07/saucedemo-manual-testing-portfolio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/epando07/saucedemo-manual-testing-portfolio/issues"
+  },
+  "homepage": "https://github.com/epando07/saucedemo-manual-testing-portfolio#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.1"
+  }
+}
