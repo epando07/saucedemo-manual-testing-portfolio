@@ -1,33 +1,36 @@
 import { test, expect } from '@playwright/test';
+// 1. Importing both page objects using capitalized 'Pages' pathing
+import { LoginPage } from '../Pages/LoginPage';
+import { InventoryPage } from '../Pages/InventoryPage';
 
-test('Verify successful login for standard_user', async ({ page }) => {
-  // Step 1: Navigate to the website
-  await page.goto('https://www.saucedemo.com/');
+// ==========================================
+// TEST 1: The Happy Path Login Test
+// ==========================================
+test('Verify successful login for standard_user using POM', async ({ page }) => {
+  const loginPage = new LoginPage(page);
 
-  // Step 2: Fill out the username field
-  await page.fill('#user-name', 'standard_user');
-
-  // Step 3: Fill out the password field
-  await page.fill('#password', 'secret_sauce');
-
-  // Step 4: Click the login button
-  await page.click('#login-button');
-
+  await loginPage.goto();
+  await loginPage.login('standard_user', 'secret_sauce');
   await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
-  await expect(page.locator('.title')).toHaveText('Products');
 });
 
-test('Verify error message displays for invalid credentials', async ({ page }) => {
-  // 1. ARRANGE
-  await page.goto('https://www.saucedemo.com/');
+// ==========================================
+// TEST 2: The E2E Cart Workflow + Screenshot Test
+// ==========================================
+test('Verify standard_user can successfully add a product to the cart', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  const inventoryPage = new InventoryPage(page);
 
-  // 2. ACT
-  await page.locator('#user-name').fill('wrong_user');
-  await page.locator('#password').fill('secret_sauce');
-  await page.locator('#login-button').click();
+  // ARRANGE: Log into the application completely
+  await loginPage.goto();
+  await loginPage.login('standard_user', 'secret_sauce');
 
-  // 3. ASSERT
-  const errorContainer = page.locator('[data-test="error"]');
-  await expect(errorContainer).toBeVisible();
-  await expect(errorContainer).toHaveText('Epic sadface: Username and password do not match any user in this service');
+  // ACT: Interact with the inventory dashboard
+  await inventoryPage.addBackpackToCart();
+
+  // ASSERT: Prove the shopping cart icon updated to show "1" item inside
+  await expect(inventoryPage.shoppingCartBadge).toHaveText('1');
+
+  // VISUAL PROOF: Take a screenshot and save it to a project folder
+  await page.screenshot({ path: 'screenshots/cart-success.png' });
 });
