@@ -32,5 +32,9 @@ test('Verify standard_user can successfully add a product to the cart', async ({
   await expect(inventoryPage.shoppingCartBadge).toHaveText('1');
 
   // VISUAL PROOF: Take a screenshot and save it to a project folder
-  await page.screenshot({ path: 'screenshots/cart-success.png' });
+ const screenshot = await page.screenshot();
+  await test.info().attach('Final Cart State', {
+    body: screenshot,
+    contentType: 'image/png',
+  });
 });
